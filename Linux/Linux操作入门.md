@@ -1,4 +1,6 @@
-# Linux操作入门（黑马）
+# Linux操作入门
+
+**指令查找：man.linuxde.net/指令名称**
 
 ## Linux指令
 
@@ -285,6 +287,10 @@ ls | wc -l
 
 ### 高级指令
 
+<center>
+    <img src="./media/high.png">
+</center>
+
 **:heart:hostname**
 
 作用：（**读取**和设置）操作服务器的主机名
@@ -347,11 +353,146 @@ ps -ef|grep gnome-panel
 ps -ef|grep firefox
 ~~~
 
-**top（重点）**
+**:heart:top（重点）**
 
 作用：查看服务器的进程占用资源
 
 语法：**top **           进入命令，q退出
+
+**:heart:du -sh**
+
+作用：查看目录的真实大小
+
+选项含义：**-S**：summaries，只显示汇总的大小
+
+​					**-h**：表示以高可读性的形式进行显示
+
+语法： **du -sh 路径**
+
+~~~javascript
+//统计 /home 目录的真实大小
+~~~
+
+**:heart:find**
+
+作用：用于查找文件（其参数有55个）
+
+语法：**find 路径范围  选项  选项的值**
+
+选项：**-name**:   按照文档名称进行搜索（支持模糊搜索）
+
+​			**-type**:     按照文档的类型进行搜索。“**-**”表示文件（在使用find的时候需要使用f来替代），“**d**”表示文件夹
+
+~~~JavaScript
+find /home -name *.txt         //找到/home路径下，后缀为txt的文件
+find /home -name *.txt|wc -l   //统计/home路径下，后缀为txt的文件的总数
+find /hoem -type d             //查找 /hemo路径下，所有的文件夹
+~~~
+
+**:heart:service（重要）**
+
+作用：用于控制一些软件的服务 **启动/停止/重启**
+
+语法：**service 服务名 start/stop/restart**
+
+~~~javascript
+service https start           //启动本机安装的apache(网站服务软件)
+service mysql start           //启动mysql服务
+~~~
+
+**:heart:kill**
+
+作用：表示杀死进程（当遇到僵尸进程或者出于某些原因需要关闭进程的时候）
+
+语法：**kill  进程PID**  （语法需要配合ps一起使用）
+
+~~~JavaScript
+ps -ef|grep httpd   //
+kill 29867          //
+~~~
+
+与kill命令作用相似但是比kill更加好用的杀死进程的命令：killall
+
+语法：**killall 进程名称**
+
+**:heart:ifconfig（重点）**
+
+作用：用于操作网卡相关的指令
+
+语法：ifconfig         （获取网卡信息）
+
+注意：inet addr就是网卡的ip地址
+
+**:heart:reboot**
+
+作用：重新启动计算机
+
+语法1：**reboot**        重启
+
+语法2：reboot  -w  模拟重启，但是不重启（只写关机和开机的日志信息）。
+
+**:heart:shutdown**
+
+作用：关机  （慎用）
+
+语法：**shutdown -h now**  或者   **shutdown  -h 15:25**
+
+~~~javascript
+//设置Linux系统关机时间在12:00
+shutdown -h 12:00 "系统将在12:00关机，请保存好你的文档"
+~~~
+
+**:heart:uname**
+
+作用：获取计算机操作系统相关的信息
+
+语法1：**uname**  获取操作系统的类型
+
+语法2：**uname -a**  表示获取全部的系统信息
+
+**:heart:netstat -tnlp**
+
+作用：查看网络连接状态
+
+选项：**-t**：表示只列出tcp协议的连接
+
+​			**-n**：表示将地址从字母组合转化成ip地址，将协议转化成端口号显示
+
+​			**-l**：表示过滤出“state”列中，其值为listen（监听）的连接
+
+​			**-p**：表示显示发起连接的进程pid和进程名称
+
+**:heart:man**
+
+作用：manul，包含了Linux中全部命令的手册（英文）
+
+语法：**man 命令**     （按 q退出）
+
+~~~javascript
+//通过man命令查询cp指令的用法
+man cp
+~~~
+
+## 指令练习
+
+- 如何通过命令行重启Linux操作系统？
+
+- 如何在命令中快速删除光标 **前/后**的内容？ Ctrl + u   Ctrl + k
+- 如何删除 /home/wan 下所有 w 开头的文件?
+- （备份系统重要文件），如何把 /home/wan 备份到 /home/zhou 目录下？
+- 如何查看系统最后创建的3个用户？
+- 什么命令可以统计当前系统中一共有多少账户？
+- 如何创建 /home/wan/wan.conf 文件？
+- 如何通过 vim 编辑器打开 /home/wan/wan.conf ？
+- 如何查看 /home/wan/wan.conf 的头3行和尾3行？
+- 如何一次性创建目录  /wan/zhou/luo/test.txt ?
+- 如何最快的返回当当前用户的根目录？
+- 如何查看  /etc 所占用的磁盘空间？
+- 如何删除  /home/wan 下所有的文件？
+- 启动mysql的服务，并且检查是否启动成功。 
+- 使用已学命令杀死mysql的进程。
+
+## vim编辑器
 
 
 
