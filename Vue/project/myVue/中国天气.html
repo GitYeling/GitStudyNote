@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/weather.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./js/weather.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="app"> 
+        <header>
+            <div class="logo">
+                <img src="./image/logo1.png" alt="">
+            </div>
+            <div class="search">
+                <input type="text" v-model="inputCity" placeholder="请输入城市名">
+                <button v-on:click="search">搜 索</button>
+            </div>
+            <div class="hotkey">
+                <span @click="hotkeySearch('成都')">成都</span>
+                <span @click="hotkeySearch('北京')">北京</span>
+                <span @click="hotkeySearch('上海')">上海</span>
+                <span @click="hotkeySearch('杭州')">杭州</span>
+            </div>
+        </header>
+        <footer>
+            <ul class="detail">
+                <li v-for="item in weather">
+                    <div class="weather_detail"><img src="./image/cloud1.png" alt=""> <span>{{item.type}}</span>  </div>
+                    <div class="waether_temp">{{item.low}} ~ {{item.high}}</div>
+                    <div class="weather_date">{{item.date}}</div>
+                </li>                                              
+            </ul>
+        </footer>
+    </div>
+</body>
+<script>
+var app  = new Vue({
+    el:'#app',
+    data:{
+        inputCity:'',
+        weather:[]
+    },
+    methods:{
+        search:function(){
+            console.log(this.inputCity)
+            var that = this
+            axios.get('http://wthrcdn.etouch.cn/weather_mini?city='+this.inputCity)
+                .then(function(response){
+                    console.log(response)
+                    that.weather = response.data.data.forecast
+                }).catch(function(err){
+                    console.log(err)
+                    alert('数据请求错误！')
+                })
+        },
+        hotkeySearch:function(city){
+            console.log(city)
+            var that = this
+            axios.get('http://wthrcdn.etouch.cn/weather_mini?city='+city)
+                .then(function(response){
+                    console.log(response)
+                    that.weather = response.data.data.forecast
+                }).catch(function(err){
+                    console.log(err)
+                    alert('数据请求错误！')
+                })            
+        }
+    }
+})
+</script>
+</html>

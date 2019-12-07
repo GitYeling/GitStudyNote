@@ -1,0 +1,497 @@
+/*
+    1.表单控件属于行内块元素，行内块元素直接存在缝隙，要想消除缝隙，可以设置浮动
+    2.当一行内既有图片，又有文字时，使用verhical-align设置垂直对齐
+    3.line-height 设置行高后，整行的元素内容都会受影响
+    4.像精品课程这种设置margin后，盒子会掉下去的情况，可以用列表来做，将ul设置得大于版心的宽
+    5.清除浮动问题：当父元素高度不确定，子元素又浮动时，需要对父元素清除浮动。清除浮动就是清除浮动元素造成的影响。
+        1) 额外标签法
+        2）overflow属性。如果我们不设置父元素高度，则不会出现内容被隐藏。
+        3）after伪元素
+        4）before和after双伪元素
+    6.footer部分，link常用dl来做
+*/
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    height: 2500px;
+    background-color: #f3f5f7;
+}
+.w {
+    width: 1200px;
+    margin: 0 auto;
+}
+/* 设置一个字体蓝色样式 */
+.b {
+    color: #00a4ff!important;
+}
+a {
+    text-decoration: none;
+}
+ul {
+    list-style: none;
+}
+.top {
+    margin:30px auto;
+    height: 42px;
+}
+.top .logo {
+    float: left;
+    width: 197px;
+    height: 100%;
+}
+.top .nav {
+    margin-left: 65px;
+    float: left;
+}
+.top .nav li{
+    float: left;
+    margin:0 15px;
+}
+.nav ul li a{
+    display: block;
+    padding: 0 10px;
+    height: 42px;
+    line-height: 42px;
+    font-size: 18px;
+    font-family: '微软雅黑';
+    color: #050505;
+}
+.nav ul li a:hover{
+    border-bottom: 2px solid #00a4ff;
+}
+.search {
+    margin-left: 60px;
+    float: left;
+    width: 412px;
+    height: 100%;
+}
+.search input {
+    float: left;
+    margin: 0px;
+    padding-left: 20px;
+    border: 1px solid #00a4ff;
+    display: block;
+    height: 40px;
+    width: 340px;
+    font-size: 14px;
+    font-family: '微软雅黑';
+}
+.search img {
+    float: left;
+    width: 50px;
+    height: 42px;
+}
+.userImg {
+    float: left;
+    margin-left: 30px;
+    height: 42px;
+    line-height: 40px;
+}
+.userImg img {
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+}
+.userImg span {
+    color: #7e7e7f;
+}
+.banner {
+    height: 420px;
+    background-color: #1c036c;
+}
+.rotation {
+    height: 100%;
+    background: url(../images/banner2.png) no-repeat top center;
+}
+.rotation > ul {
+    float: left;
+    padding-top: 20px;
+    width: 192px;
+    height: 400px;
+    background-color: rgba(0,0,0,0.5);
+}
+.rotation ul li {
+    padding: 0 20px;
+    height: 45px;
+    line-height: 45px;
+}
+.rotation ul li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    color: white;
+}
+.rotation ul li a:hover {
+    color:#00a4ff;
+}
+.rotation ul li a span{
+    float: right;
+}
+.rotation .myclass {
+    margin-top: 50px;
+    float: right;
+    width: 230px;
+    height: 300px;
+    background-color: #fff;
+}
+.myclass > p {
+    height: 50px;
+    line-height: 50px;
+    background-color: #9bceea;
+    text-align: center;
+    letter-spacing: 3px;
+    font-size: 18px;
+    color: white;
+}
+.myclass ul {
+    margin-top: 8px;
+}
+.myclass > ul > li{
+    margin: 0 20px;
+    padding: 0;
+    border-bottom: 1px solid #ccc;
+    width: 190px;
+    height: 60px;
+    /* line-height: 60px; */
+}
+.myclass > ul > li > p{
+    height: 16px;
+    font-size: 18px;
+    color: #3b3b3b;
+}
+.myclass > ul > li > span{
+    font-size: 12px;
+    color: #b3b3b3;
+}
+.myclass >span {
+    margin: 5px 15px;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    width: 199px;
+    font-size: 16px;
+    color: #22b0ff;
+    border: 2px solid #22b0ff;
+}
+.excellentCorse {
+    margin-top: 10px;
+    box-shadow: 0px 3px 2px #ccc;
+    height: 60px;
+    line-height: 60px;
+    background-color: #fff;
+}
+.excellentCorse > span { 
+    float: left;
+    display: block;
+    padding: 0 35px;
+    height: 60px;
+    line-height: 60px;
+    color: #00a4ff;
+    font-size: 16px;
+    font-weight: 700;
+}
+.excellentCorse ul{
+    height: 100%;
+    float: left;
+}
+
+.excellentCorse ul li{
+    float: left;
+    height: 100%;
+}
+
+.excellentCorse ul li a{
+    padding: 0  30px;
+    height: 15px;
+    border-left: 1px solid #ccc;
+    color: #000;
+}
+.excellentCorse>span:nth-child(3){
+    float: right;
+    color: #00a4ff;
+    font-size: 14px;
+}
+.textExcellent {
+    height: 40px;
+    line-height: 40px;
+    margin-top:30px;
+    margin-bottom: 10px;
+}
+.textExcellent span:nth-child(1) {
+    float: left;
+    font-size: 20px;
+    color: #494949;
+}
+.textExcellent span:nth-child(2) {
+    float: right;
+    font-size: 12px;
+    color: #bbbdbe;
+}
+.excellentBox {
+    overflow: hidden;
+    /* height: 630px; */
+}
+.excellentBox ul {
+    width: 1215px;
+}
+.excellentBox li {
+    float: left;
+    margin-right:15px;
+    margin-bottom: 15px;
+    width:228px;
+    height: 272px;
+    background-color: #fff;
+}
+.excellentBox li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.excellentBox li img {
+    height: 155px;
+    width:100%;
+}
+.excellentBox li a .detailbox {
+    padding: 25px 20px;
+    font-size: 14px;
+    color: black;
+}
+.excellentBox .detailbox span:nth-child(2) {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #ff9159;
+}     
+.excellentBox .detailbox span:nth-child(3) {
+    font-size: 12px;
+    color: #a1a1a1;
+}
+.program  {
+    clear: both;
+    height: 447px;
+}
+.program .title {
+    margin: 20px 0 15px 0;
+    height: 35px;
+    line-height: 35px;
+}
+.program .title span:nth-child(1) {
+    float: left;
+    font-size: 20px;
+    color: #494949;
+}
+.program .title ul {
+    float: left;
+    margin-top:5px;
+    margin-left:350px;
+}
+.program .title ul li {
+    float: left;
+    width: 100px;
+}
+.program .title ul li a{
+    color:rgb(133, 133, 133);
+}
+.program .title span:nth-child(3) {
+    margin-top:5px;
+    float: right;
+}
+.program .title span:nth-child(3) a {
+    font-size: 12px;
+    color: rgb(133, 133, 133);
+}
+.program .left {
+    float: left;
+    width: 230px;
+    height: 393px;
+}
+.program .right {
+    float: left;
+    margin-left:14px;
+    width: 956px;
+    height: 393px;
+}
+.program .right .top {
+    margin: 0;
+    margin-bottom: 20px;
+    height: 100px;
+    width: 100%;
+}
+.program .right .bottom ul {
+    width: 980px;
+}
+.program .right .bottom li {
+    float: left;
+    margin-right:15px;
+    margin-bottom: 15px;
+    width:228px;
+    height: 272px;
+    background-color: #fff;
+}
+.program .right .bottom li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.program .right .bottom li img {
+    height: 155px;
+    width:100%;
+}
+.program .right .bottom li a .detailbox {
+    padding: 25px 20px;
+    font-size: 14px;
+    color: black;
+}
+.program .right .bottom .detailbox span:nth-child(2) {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #ff9159;
+}     
+.program .right .bottom .detailbox span:nth-child(3) {
+    font-size: 12px;
+    color: #a1a1a1;
+}
+/* 数据分析 */
+.dataAnalysis  {
+    clear: both;
+    /* height: 447px; */
+    margin-top: 25px;
+    margin-bottom: 40px;
+}
+.dataAnalysis .title {
+    margin: 20px 0 15px 0;
+    height: 35px;
+    line-height: 35px;
+}
+.dataAnalysis .title span:nth-child(1) {
+    float: left;
+    font-size: 20px;
+    color: #494949;
+}
+.dataAnalysis .title ul {
+    float: left;
+    margin-top:5px;
+    margin-left:350px;
+}
+.dataAnalysis .title ul li {
+    float: left;
+    width: 100px;
+}
+.dataAnalysis .title ul li a{
+    color:rgb(133, 133, 133);
+}
+.dataAnalysis .title span:nth-child(3) {
+    margin-top:5px;
+    float: right;
+}
+.dataAnalysis .title span:nth-child(3) a {
+    font-size: 12px;
+    color: rgb(133, 133, 133);
+}
+.dataAnalysis .left {
+    float: left;
+    width: 230px;
+    height: 393px;
+}
+.dataAnalysis .right {
+    float: left;
+    margin-left:14px;
+    width: 956px;
+    height: 393px;
+}
+.dataAnalysis .right .top {
+    margin: 0;
+    margin-bottom: 20px;
+    height: 100px;
+    width: 100%;
+}
+.dataAnalysis .right .bottom ul {
+    width: 980px;
+}
+.dataAnalysis .right .bottom li {
+    float: left;
+    margin-right:15px;
+    margin-bottom: 15px;
+    width:228px;
+    height: 272px;
+    background-color: #fff;
+}
+.dataAnalysis .right .bottom li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.dataAnalysis .right .bottom li img {
+    height: 155px;
+    width:100%;
+}
+.dataAnalysis .right .bottom li a .detailbox {
+    padding: 25px 20px;
+    font-size: 14px;
+    color: black;
+}
+.dataAnalysis .right .bottom .detailbox span:nth-child(2) {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #ff9159;
+}     
+.dataAnalysis .right .bottom .detailbox span:nth-child(3) {
+    font-size: 12px;
+    color: #a1a1a1;
+}
+.clearAnalysis {
+    clear: both;
+    margin-bottom: 20px;
+}
+.footer {
+    padding-top: 34px;
+    height: 417px;
+    width: 100%;
+    background-color: #fff;
+}
+.footer .left {
+    float: left;
+    margin-left: 21px;
+}
+.footer .left span {
+    display: block;
+    margin-top: 25px;
+    font-size: 12px;
+    font-family: '宋体';
+    color: #666666;
+}
+.footer .left :nth-child(3) {
+    margin-top: 0;
+}
+.footer .left :nth-child(4) {
+    margin-top: 18px;
+    border: 1px solid #00a4ff;
+    width: 120px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    color: #00a4ff;
+    font-weight: 600;
+    font-size: 16px;
+}
+.footer .link {
+    float: right;
+}
+.footer .link dl {
+    padding-left: 147px;
+    float: right;
+}
+.footer .w .link dl dt {
+    color: #666666;
+}
+
+.footer .w .link dl dd a{
+    font-size: 12px;
+    color: black;
+}

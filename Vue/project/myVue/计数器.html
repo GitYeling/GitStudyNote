@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id='app'>
+        <button v-on:click="onClickSub">-</button>
+        <span>{{num}}</span>
+        <button v-on:click="onClickAdd">+</button>
+    </div>
+</body>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data:{
+            num:'0'
+        },
+        methods:{
+            onClickAdd:function(){
+                if(this.num >= 10){
+                    alert('不能再增加了！')
+                    return false
+                }
+                this.num++;
+            },
+            onClickSub:function(){
+                if(this.num <= 0){
+                    alert('不能减少了！')
+                    return false
+                }
+                this.num--;
+            }
+        }
+    })
+</script>
+<style>
+    button{
+        border:0px;
+        padding: 0px;
+        width: 100px;
+        height: 50px;
+        display: inline-block;
+        font-size: 25px;
+        background-color: rgb(200,199,200);
+        outline: none;
+        cursor: pointer;
+    }
+    button:hover{
+        color: white;
+    }
+    #app{
+        font-size: 20px;
+        width:402px;
+        height: 50px;
+        line-height: 50px;
+        margin: 100px auto;
+        box-shadow: 3px 3px 3px gray;
+        border-radius:10px 10px 10px 10px;
+    }
+    #app button:nth-child(1){
+        border-radius: 10px 0 0 10px;
+        float: left;
+    }
+    #app span{
+        float: left;
+        height: 48px;
+        width: 200px;
+        padding: 0px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+    #app button:nth-child(3){
+        float: left;
+        border-radius:0 10px 10px 0;
+    }    
+</style>
+</html>

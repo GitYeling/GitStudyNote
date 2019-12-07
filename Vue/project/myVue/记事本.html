@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/notebook.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./js/notebook.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="top">
+            <header>
+                <img src="./image/panda.png" alt="">
+                <span>熊猫记事本</span>
+            </header>
+            <article>
+                <div class="input">
+                    <input type="text" placeholder="请输入事项" v-model="input" @keydown.enter="inputChange">
+                </div>
+                <div class="row" v-for="item in notes">
+                    <span>{{item.index}}.&ensp; &emsp;{{item.content}}</span>
+                    <span class="close" @click="clear(item.index)">x</span>
+                </div>
+            </article>
+            <footer >
+                <span v-show="notes.length != 0"> <strong>{{count}}</strong> 条记录</span>
+                <span @click="clearAll" v-if="notes.length != 0">清除</span>
+            </footer>
+            <div class="border1"></div>
+            <div class="border2"></div>
+        </div>
+</body>
+<script>
+    var app = new Vue({
+    el:'#app',
+    data:{
+        input:'',
+        count:2,
+        notes:[
+            {
+               index:1,
+               content:'吃饭'
+            },
+            {
+               index:2,
+               content:'睡觉'
+            }            
+        ]
+    },
+    methods:{
+        inputChange:function(){
+            var item = {index:0,content:''}
+            var length = this.notes.length
+            if(length != 0){
+                item.index = this.notes[length-1].index +1
+            }else{
+                item.index = 1
+            }
+
+            item.content = this.input
+            this.notes.push(item)
+            this.count = length + 1
+        },
+        clearAll(){
+            this.notes = []
+        },
+        clear(index){
+            if (this.notes.length == 1){
+                this.notes = []
+            }else{
+                this.notes.splice(index-1,1)
+            }
+            this.count = this.notes.length
+        }
+    }
+})
+</script>
+
+</html>
