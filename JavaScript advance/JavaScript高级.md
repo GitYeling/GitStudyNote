@@ -255,7 +255,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/Element/insertAdjacentHTML
 
 
 
-![JS面向对象](E:/Yeling/Study/development/JavaScript Advanced/media/JS面向对象.png)
+![JS面向对象](./media/JS面向对象.png)
 
 ## 构造函数和原型 ##
 
@@ -320,7 +320,7 @@ JavaScript的构造函数中可以添加一些成员，可以在构造函数本�
 
 - 实例成员：在构造函数内部创建的对象成员。**只能由实例化的对象来访问**
 
-![JS面向对象](E:/Yeling/Study/development/JavaScript Advanced/media/20191201151844.png)
+![JS面向对象](./media/20191201151844.png)
 
 ### 构造函数原型对象prototype ###
 
@@ -426,7 +426,380 @@ var son =  new Son('刘德华',18,100)；
 console.log(son)；
 ~~~
 
-### 利用原型对象继承父类方法
+### 利用原型对象继承父类方法（待完成）
+
+### 类的本质
+
+class的本质还是function。我们也可以简单的认为：类就是构造函数的另外一种写法。
+
+类的所有方法都定义在类的Prototype属性上
+
+类创建的实例，里面也有_proto_指向类的prototype原型对象
+
+所以ES6的类的绝大部分功能，ES5都可以做到，新的class写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已。
+
+所以ES6的类其实就是语法糖
+
+## ES5新增函数
+
+### 数组方法
+
+迭代（遍历）方法：forEach()、map()、filter()、some()、every()
+
+~~~javascript
+// forEach方法
+var people = ['张三','李四','王五','赵柳']
+people.foeEach(function(value,index,array){
+    console.log(value)
+})
+
+// filter方法用于筛选数组，返回一个新数组
+var arr = [10,90,11,110,87,69,58]
+arr = arr.filter(function(value,index){
+    return value >= 60;
+})
+
+// some方法查找数组中是否有满足条件的元素，返回布尔值，找到第一个满足条件的元素时，循环终止
+var arr = [10,90,11,110,87,69,58]
+var flag = arr.some(function(value,index){
+    return value < 9
+})
+~~~
+
+### 查询商品案例
+
+渲染页面数据
+
+根据价格查询商品，并且显示
+
+根据商品名称筛选商品
+
+### 字符串方法
+
+**trim()**
+
+trim()方法会从一个字符串的两端删除空白字符，不会去掉中间的空白字符。
+
+trim()方法并不影响原字符串本身，它返回的是一个新的字符串。
+
+~~~javascript
+var str = '  zhangsan   '
+str = str.trim()
+console.log(str)
+~~~
+
+### 对象方法
+
+**Object.defineProperty()**
+
+Object.defineProperty()定义对象中新属性或修改原有的属性。
+
+~~~javascript
+object.defineProperty(obj,prop,descriptor)
+~~~
+
+第三个参数descriptor说明：以对象形式{ }书写
+
+- value：设置属性的值，默认为undefined
+- writable：值是否可以重写。默认为false
+- enumerable：目标属性是否可以被枚举。默认为false
+- configurable：目标属性是否可以被删除或者是否可以再次修改特性，默认为false。
+
+## 函数进阶
+
+<center>
+    <img src="./media/function.png">
+</center>
+
+### 函数的定义与调用
+
+**函数的定义方式**
+
+- 函数声明方式（function关键字）
+
+  ~~~javascript
+  function func(){
+      // 函数体
+  }
+  ~~~
+
+- 函数表达式（匿名函数）
+
+  ~~~javascript
+  var func = function(){
+      // 函数体
+  }
+  ~~~
+
+- new function()
+
+  ~~~javascript
+  var func = new Function('参数1','参数2',...,'参数n','函数体')
+  ~~~
+
+- 所有函数都是Function的实例（对象）
+
+  ~~~javascript
+  console.log(func intanceof Object);  // 输出为true
+  ~~~
+
+**函数的调用方式**
+
+- 普通函数
+
+  ~~~javascript
+  function fn(){
+      //函数体
+  }
+  // 调用
+  fn();  
+  // 或者
+  fn.call()
+  ~~~
+
+- 对象的方法
+
+  ~~~javascript
+  var func = {
+      play:function(){
+          // 函数体
+      }
+  }
+  func.play()
+  ~~~
+
+- 构造函数
+
+  ~~~javascript
+  function Star(){
+      
+  }
+  new Star();
+  ~~~
+
+- 绑定事件函数
+
+  ~~~javascript
+  btn.onclick = function(){
+      // 点击事件处理函数
+  }
+  ~~~
+
+- 定时器函数
+
+  ~~~javascript
+  setInterval(function(){
+      // 定时任务
+  },1000)
+  ~~~
+
+- 立即执行函数
+
+  ~~~JavaScript
+  (function(){
+      // 函数体
+  })
+  ~~~
+
+### 函数内部的this指向
+
+当我们调用函数时，调用方式的不同决定了this的指向不同。
+
+一般指向我们的调用者。
+
+| 调用方式     | this指向                                   |
+| ------------ | ------------------------------------------ |
+| 普通函数调用 | window                                     |
+| 构造函数调用 | 实例对象，原型对象里面的方法也指向实例对象 |
+| 对象方法调用 | 该方法所属对象                             |
+| 事件绑定方法 | 绑定事件对象                               |
+| 定时器函数   | window                                     |
+| 立即执行函数 | window                                     |
+
+JavaScript为我们专门提供了一些函数方法来帮助我们更优雅的处理函数内部this的指向问题，常用的有bind()、call()、apply()三种方法。
+
+### call()方法及其应用
+
+call()方法**调用**一个对象。简单理解为调用函数的方式，但是它可以改变函数的this指向。
+
+~~~javascript
+// 定义对象 Obj
+var Obj = {
+    name:'bob'
+}
+// 定义函数
+var func = {
+    console.log(this)
+}
+// 普通调用方式输出 ‘window’
+func() 
+//使用call()改变指向
+func.call(Obj,实参1，实参2);
+~~~
+
+call的主要作用是实现**继承**
+
+~~~javascript
+function Father(uname,age,sex){
+    this.uname = uname;
+    this.age = age;
+    this.sex = sex;
+}
+function Son(uname,age,sex){
+    Father.call(this,uname,age,sex)
+}
+// 实例化对象
+var son = new Son('刘德华',18,'男');
+console.log(son)
+~~~
+
+### apply方法及其应用
+
+apply()方法**调用**一个函数，简单理解为调用函数的方式，但是它可以改变函数的this指向。
+
+*func.apply(thisArg,**[argsArray]**)*
+
+**thisArg**:在func函数运行时指定的this值
+
+**argsArray**:传递的值，必须包含在**数组**里面
+
+返回的值就是函数的返回值，因为它就是调用函数
+
+~~~javascript
+var arr = [10,90,100,111,87,2]
+
+var max = Math.max.apply(Math,arr)
+console.log(max)
+~~~
+
+### bind方法的基本使用
+
+bind()方法不会调用函数，但是能够改变函数内部this指向。
+
+*func.bind(thisArg,arg1,arg2, ...)*
+
+- 返回由指定的this值和初始化参数改造的**原函数拷贝**
+
+~~~javascript
+var O = {
+    name:'andy'
+}
+function fn(){
+   console.log(this)
+}
+var f = fn.bind(O);
+f();
+~~~
+
+如果有的函数我们不需要立即调用，但是又想改变函数内部的this指向，此时用bind()
+
+~~~javascript
+var btn = document.queryselector('button');
+btn.onclick = function(){
+    this.disabled = true;
+    setTimeOut(function(){
+        this.disabled = false;
+    }.bind(this),3000)
+}
+~~~
+
+**练习1：**创建五个按钮，分别给每个函数设置点击事件，点击后立即禁用，过三秒钟恢复。
+
+**练习2：**结合bind()函数，改造 **tab栏** 案例
+
+### 严格模式
+
+JavaScript除了提供正常模式外，还提供**严格模式（strict model）**。ES5的严格模式是采用具有限制性JavaScript变体的一种方式，即在严格的条件下运行js代码。
+
+严格模式在IE10以上版本的浏览器中才会被支持，旧版本浏览器中会被忽略。
+
+严格模式对正常的JavaScript语义做了一些更改。
+
+**开启严格模式**
+
+严格模式可以应用到**整个脚本**或**个别函数**中。因此在使用时，我们可以将严格模式分为**为脚本开启严格模式**，和**为函数开启严格模式**两种情况。
+
+- 为脚本开启严格模式
+
+  在所有语句之前放一个特定语句“use strict”;
+
+- 为函数开启严格模式
+
+  把'use strict'声明放在函数体所有语句之前
+
+严格模式对JavaScript的语法和行为，都做了一些改变，下面，我将细述其中一些改变。
+
+**变量规定**
+
+- 变量必须先声明再使用
+- 严禁删除已经声明过的变量
+
+**this指向问题**
+
+- 以前在全局作用于函数中的this指向window对象
+- 严格模式下全局作用域函数中的this是**undefined**
+- 以前构造函数不加new也可以调用，当普通函数调用，this指向全局对象
+- 严格模式下，构造函数必须加new才能调用
+- new 实例化的构造函数指向创建的实例对象
+- 定时器this还是指向window
+- 事件、对象还是指向调用者
+- 函数不能有重名的参数
+
+### 高阶函数
+
+满足如下两点中的任意一点，即可称为高阶函数：
+
+*1.接受函数作为参数*。（函数也是一种数据类型，同样可以作为参数，最典型的就是作为回调函数）
+
+*2.将函数作为返回值输出*
+
+### 闭包
+
+**闭包（closure）**指有权访问另一个函数作用域中变量的函数。
+
+简单理解就是，一个作用域可以访问另外一个函数内部的局部变量。
+
+~~~javascript
+function fn() {
+    var num = 10;
+    function fun(){
+        console.log(num)
+    }
+    fun()
+}
+fn(); // 打印10
+~~~
+
+可以使用浏览器调试工具查看是否产生闭包。
+
+**闭包的作用**
+
+上面那段代码中fn外面的作用域可以访问fn内部的局部变量。
+
+~~~javascript
+function fn(){
+    var num = 10;
+    return function(){
+        console.log(num)
+    }
+}
+var f = fn();
+f()             //打印10
+~~~
+
+:heart:闭包的主要作用：**延伸了变量的作用范围**
+
+**闭包的应用**
+
+**练习1**：使用闭包实现点击li打印当前的索引号
+
+**练习2**：3秒后打印li内容
+
+**练习3**：计算打车价格
+
+
+
+
 
 
 
