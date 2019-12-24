@@ -1,0 +1,58 @@
+/************ 用户表 ********************/
+create table user(
+Id int auto_increment primary key,
+Username  varchar(20) not null,
+Password  varchar(20) not null,
+Truename  varchar(20) not null,
+Phone   varchar(20) not null,
+Sex  varchar(6) not null,
+Registertime datetime not null, 
+Address  varchar(50),
+Detail   varchar(255),
+Image varchar(255)
+)engine=InnoDB default charset=utf8;
+
+/************  文章表 *******************/
+
+Create table artical(
+Id int auto_increment primary key,
+User_id int not null,
+Title varchar(50) not null,
+Auther varchar(20) not null,
+Classify varchar(20) not null,
+Times int default(0),
+Content text not null,
+Createdate datetime not null,
+Updatedate datetime,
+Foreign key(User_id) references user(id)
+)engine=innoDB default charset=utf8;
+
+
+/************* 评论表 *****************/
+Create table review(
+Id int auto_increment primary key,
+Artical_id int not null,
+Send_id int not null,
+Receive_id int not null,
+Content varchar(255),
+Foreign key(Artical_id) references artical (id)
+)engine=innoDB default charset=utf8;
+
+/***************** 文章收藏表 *******************/
+Create table articalCollection(
+Id int auto_increment primary key,
+Artical_id int not null,
+User_id int not null,
+Foreign key(Artical_id) references artical (id),
+Foreign key(User_id) references user(id)
+)engine=innoDB default charset=utf8;
+
+/****************** 用户关注表 *****************/
+
+Create table follow(
+Id int auto_increment primary key,
+User_id int not null,
+Attention_id int not null,
+Foreign key(User_id) references user (Id),
+Foreign key(Attention_id) references user (Id)
+)engine=innoDB default charset=utf8;
