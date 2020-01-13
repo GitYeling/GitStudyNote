@@ -1,0 +1,27 @@
+{
+  "development": {
+    "username": "root",
+    "password": "18483621011",
+    "database": "koatest",
+    "host": "localhost",
+    "port":3306,
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "root",
+    "password": "18483621011",
+    "database": "koatest",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "root",
+    "password": "18483621011",
+    "database": "koatest",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  }
+}
