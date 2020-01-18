@@ -1048,6 +1048,175 @@ if (global.config.environment == 'dev'){
   
   ~~~
 
-  
+## 参数校验
 
+由于Koa框架过于精简灵活，或多其他语言框架自带的功能，它都没有，比如参数校验。在我们这个项目中，我介绍一个别人写好的参数校验模块： **lin-validator**，基本使用过程如下：
+
+- 首先需要导入模块到 core 文件夹中： **lin-validator**、**util**
+
+- 在 APP 文件夹下面新建一个 validators 文件夹，再创建一个 validator.js 文件。参数校验部分写于该文件。
+
+- 安装 **lin-validator**使用的依赖：**validator** 、**lodash**
+
+- 在 validator.js 文件中编写参数验证代码：
+
+  ~~~javascript
+  const { LinValidator, Rule } = require('../../core/lin-validator')
   
+  class PositiveIntegerValidator extends LinValidator {
+      constructor() {
+          super()
+          this.id = [
+              new Rule('isInt', '需要是正整数', { min: 1 })
+          ]
+      }
+  }
+  module.exports = PositiveIntegerValidator
+  ~~~
+
+- 再到路由文件中来使用：
+
+  ~~~javascript
+  // 引入
+  const { PositiveIntegerValidator } = require('../../validators/validator')
+  
+  // 使用
+  var v = new PositiveIntegerValidator().validate(ctx)
+  ctx.body = 'succsess'
+  ~~~
+
+- 有了 lin-validator 之后，我们就不用了再通过  ctx.xxx 的方式获取参数了，因为我们将 ctx 作为参数传递到 校验类中时，LinValidator 会将参数提取出来，包含在返回的对象中，所以我们只需要从返回对象中取参数即可：
+
+  ~~~javascript
+  var valiData = new PositiveIntegerValidator().validate(ctx)
+  const path = valiData.data.path
+  const query = valiData.data.query
+  const headers = valiData.data.header.token 
+  const body = valiData.data.body   
+  ~~~
+
+## 用户注册信息校验
+
+上一节讲解了 lin-validator 的基本使用，这一节，以注册为例讲解该验证器的扩展应用，下面是  **RegisterValidator** 类，在验证类的构造函数中，设定了各字段的验证规则。验证类中有一个 **validateFunc** 方法，该方法做两个参数的比较，在这儿是比较密码和确认密码是否相等。
+
+~~~javascript
+class RegisterValidator extends LinValidator {
+    constructor() {
+        super()
+        //username nickname password confirm_password email
+        this.username = [
+            new Rule('isLength','用户名长度至少4个字符，最多20个字符',{
+                min:4,
+                max:20
+            })
+        ]
+        this.email = [
+            new Rule('isEmail','不符合Email规范')
+        ]
+        this.nickname = [
+            new Rule('isLength','昵称不符合长度规范',{
+                min:4,
+                max:20
+            })
+        ]
+        this.password = [
+            new Rule('isLength','密码长度至少6个字符，最多30个字符',{
+                min:6,
+                max:30
+            }),        
+            new Rule('matches','密码不符合规范','^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]')                
+        ]
+        this.confirm_password = this.password
+    }
+
+    validateConfirmPassword(data) {
+        if (!data.body.password || !data.body.confirm_password) {
+          return [false, "密码不能为空"];
+        }
+        let ok = data.body.password === data.body.confirm_password;
+        if (ok) {
+          return ok;
+        } else {
+          return [false, "两次输入的密码不一致，请重新输入"];
+        }
+      }    
+}
+~~~
+
+**验证使用**
+
+使用也是很方便的，先导入，然后创建一个 **RegisterValidator** 类的实例对象，调用 validate 方法，接收一个返回值，我们可以从这个返回值中获取通过校验的参数。在下面代码中，实例化Router对象时，传入了一个JavaScript对象，该对象有一个属性 prefix:'/v1/user' ，该属性设定了 url 前缀。
+
+~~~javascript
+const Router = require('koa-router')
+const { RegisterValidator } = require('../../validators/validator')
+
+const router = new Router({
+    prefix: '/v1/user'
+})
+
+router.post('/register', async (ctx, next) => {
+    var valiData = new  RegisterValidator().validate(ctx)
+    ctx.body = '注册成功！！'
+})
+
+module.exports = router
+~~~
+
+ **修改全局异常处理中间件**
+
+在全局异常中间件中，我们修改抛出异常的情况，当既处于开发环境，并且捕获到下层抛出的异常不是 HttpException 时，才将异常继续往上层抛给 JavaScript解释器：
+
+~~~javascript
+const IS_HTTPException = error instanceof HttpException
+const IS_DEV = global.config.environment == 'dev'
+if (IS_DEV && !IS_HTTPException){
+    throw error;
+}
+~~~
+
+运行服务器，客户端访问后，返回验证结果：
+
+![image-20200114170340553](C:\Users\Zhang's member\AppData\Roaming\Typora\typora-user-images\image-20200114170340553.png)
+
+## 用户注册与Sequelize新增数据
+
+上一节已经完成了用户注册信息的验证，现在需要将通过验证的注册信息持久化到系统数据库中，
+
+首先在路由处理文件中，导入 Sequelize 和 models ：
+
+~~~JavaScript
+const Models = require('../../DBModule/models')
+const {Sequelize} = require('sequelize')
+
+~~~
+
+然后从验证器的返回数据中，取出通过校验的数据，构建成 user 对象，然后将数据插入到数据库中，并且将插入数据时返回的对象，响应给客户端：
+
+~~~javascript
+    var user = {
+        username: valiData.get('body.username'),
+        nickname: valiData.get('body.nickname'),
+        email: valiData.get('body.email'),
+        password: valiData.
+        get('body.password'),
+    }
+    var dbReturn =  await Models.User.create(user)
+    ctx.body = dbReturn    
+~~~
+
+需要注意的是，我们存到数据库中的密码，不能以明文的方式进行存储，我在这儿用的**盐加密**的方式对密码进行加密。在 models 下面的 user 模型文件中，将 password 字段作如下修改，其中当我们给 password 赋值时便会调用 set() 方法，在 set 方法中使用了盐加密：
+
+~~~javascript
+password: {
+    type: Sequelize.STRING,
+        set(val) {
+        const salt = bcrypt.genSaltSync(10) 
+        const hash = bcrypt.hashSync(val, salt)
+        this.setDataValue('password', hash)
+    }
+},
+~~~
+
+使用 postman 提交数据即可完成注册。
+
