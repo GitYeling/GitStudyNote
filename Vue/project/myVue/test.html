@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./js/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+    <p></p>
+</body>
+<script>
+    axios.get('http://wthrcdn.etouch.cn/weather_mini?city=成都')
+        .then(function(response){
+            console.log(response)
+        },function(err){
+            console.log(err)
+        })
+    // axios.get('https://autumnfish.cn/api/joke/list?num=1')
+    //     .then(function(response){
+    //         var data = response.data.jokes[0]
+    //         var p = document.querySelector('p')
+    //         p.innerText = data.toString()
+    //         // console.log(response.data)
+    //     },function(err){
+    //         console.log(err)
+    //     })
+    // axios.post('https://autumnfish.cn/api/user/reg',{username:'zhangsanlisi001'})
+    //     .then(function(response){
+    //         console.log(response)
+    //     },function(err){
+    //         console.log(err)
+    //     })
+</script>
+</html>

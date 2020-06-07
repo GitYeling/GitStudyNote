@@ -170,8 +170,6 @@ app.use((ctx,next) => {
 })
 ~~~
 
-
-
 ![image-20200109163153631](C:\Users\Zhang's member\AppData\Roaming\Typora\typora-user-images\image-20200109163153631.png)
 
 这个**Promise**是下一个中间件返回的值，我们可以在下一个中间件返回值，然后在第一个中间件用**then()**方法来取出这个返回的值：
@@ -292,7 +290,7 @@ console.log(value)
 
 ## 保证洋葱模型
 
-上一节提到，我们讲到，await可以方便我们获取Promise对象包裹的值。但是，Koa中使用await并不是为了方便回去下一个中间件的值，而是为了**保证洋葱模型**。在很多情况下，如果不遵循**async**-**await**的处理方式，中间件的执行可能会打破洋葱模型，比如下面这种：
+上一节提到，我们讲到，await可以方便我们获取Promise对象包裹的值。但是，Koa中使用await并不是为了方便返回下一个中间件的值，而是为了**保证洋葱模型**。在很多情况下，如果不遵循**async**-**await**的处理方式，中间件的执行可能会打破洋葱模型，比如下面这种：
 
 ~~~javascript
 const Koa = require('koa')
@@ -419,8 +417,6 @@ app.use(router.routes())
 其次，在项目目录结构中，我们app目录，然后在APP目录下面再创建一个api目录，然后在该目录下再分别创建v1和v2目录，这两个目录页分别对应着不同版本的接口：
 
 ![image-20200111202552094](C:\Users\Zhang's member\AppData\Roaming\Typora\typora-user-images\image-20200111202552094.png)
-
-
 
 现在我们的代码改写情况如下：
 
@@ -563,10 +559,6 @@ module.exports = router
 ~~~
 
 在上面的代码中，process.cwd()可以获取当前工作路径，然后再拼接上/app/api，在这里用到了ES6的模板字符串。
-
-
-
-
 
 ## 参数获取
 
@@ -743,7 +735,7 @@ end()
 
 通过以上的学习，你懂得了如何处理异步函数抛出的异常，但是有没有一种方法，让我们能够避免在整个代码中到处书写 **try...catch...**呢，答案是有的。我们可以编写一个中间件，用来对全局抛出的异常进行处理，然后在其他地方，我们只需要抛出异常即可。
 
-首先，在根目录下创建一个 midllewares 文件夹，然后在这个文件夹中创建一个文件 exception.js ，这个文件将作为我们的全局异常处理中间件：
+首先，在根目录下创建一个 middlewares 文件夹，然后在这个文件夹中创建一个文件 exception.js ，这个文件将作为我们的全局异常处理中间件：
 
 ~~~javascript
 const catchError = async (ctx, next) => {
@@ -965,7 +957,6 @@ if (global.config.environment == 'dev'){
 
   ~~~javascript
   'use strict';
-  const bcrypt = require('bcryptjs')
   module.exports = {
     up: (queryInterface, Sequelize) => {
       return queryInterface.createTable('Users', {
@@ -973,23 +964,24 @@ if (global.config.environment == 'dev'){
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
-          type: Sequelize.INTEGER
+          type: DataTypes.INTEGER
         },
         username: {
-          type: Sequelize.STRING
+          type: DataTypes.STRING
         },
         nickname: {
-          type: Sequelize.STRING
+          type: DataTypes.STRING
         },
         email: {
-          type: Sequelize.STRING
+          type: DataTypes.STRING(64),
+          unique: true
         },
         openid: {
-          type: Sequelize.STRING(64),
+          type: DataTypes.STRING(64),
           unique: true
         },
         password: {
-          type: Sequelize.STRING,
+          type: DataTypes.STRING,
           set(val) {
             const salt = bcrypt.genSaltSync(10)
             const hash = bcrypt.hashSync(val, salt)
@@ -998,11 +990,11 @@ if (global.config.environment == 'dev'){
         },
         createdAt: {
           allowNull: false,
-          type: Sequelize.DATE
+          type: DataTypes.DATE
         },
         updatedAt: {
           allowNull: false,
-          type: Sequelize.DATE
+          type: DataTypes.DATE
         }
       });
     },
@@ -1052,7 +1044,7 @@ if (global.config.environment == 'dev'){
 
 由于Koa框架过于精简灵活，或多其他语言框架自带的功能，它都没有，比如参数校验。在我们这个项目中，我介绍一个别人写好的参数校验模块： **lin-validator**，基本使用过程如下：
 
-- 首先需要导入模块到 core 文件夹中： **lin-validator**、**util**
+- 首先需要导入模块到 core 文件夹中： **lin-validator**、**util**	
 
 - 在 APP 文件夹下面新建一个 validators 文件夹，再创建一个 validator.js 文件。参数校验部分写于该文件。
 
@@ -1061,7 +1053,7 @@ if (global.config.environment == 'dev'){
 - 在 validator.js 文件中编写参数验证代码：
 
   ~~~javascript
-  const { LinValidator, Rule } = require('../../core/lin-validator')
+  const { LinValidator, Rule } = require('../../core/lin-v2')
   
   class PositiveIntegerValidator extends LinValidator {
       constructor() {
@@ -1081,14 +1073,14 @@ if (global.config.environment == 'dev'){
   const { PositiveIntegerValidator } = require('../../validators/validator')
   
   // 使用
-  var v = new PositiveIntegerValidator().validate(ctx)
+  var v = await new PositiveIntegerValidator().validate(ctx)
   ctx.body = 'succsess'
   ~~~
 
 - 有了 lin-validator 之后，我们就不用了再通过  ctx.xxx 的方式获取参数了，因为我们将 ctx 作为参数传递到 校验类中时，LinValidator 会将参数提取出来，包含在返回的对象中，所以我们只需要从返回对象中取参数即可：
 
   ~~~javascript
-  var valiData = new PositiveIntegerValidator().validate(ctx)
+  var valiData = await new PositiveIntegerValidator().validate(ctx)
   const path = valiData.data.path
   const query = valiData.data.query
   const headers = valiData.data.header.token 
@@ -1131,15 +1123,26 @@ class RegisterValidator extends LinValidator {
 
     validateConfirmPassword(data) {
         if (!data.body.password || !data.body.confirm_password) {
-          return [false, "密码不能为空"];
+            throw new Error("密码不能为空")
         }
         let ok = data.body.password === data.body.confirm_password;
         if (ok) {
-          return ok;
+            return ok;
         } else {
-          return [false, "两次输入的密码不一致，请重新输入"];
+            throw new Error("两次输入的密码不一致，请重新输")
         }
-      }    
+    } 
+    async validateEmailExist(data) {
+        var email = data.body.email;
+        var user = await Models.User.findOne({
+            where: {
+                email: email
+            }
+        })
+        if (user) {
+            throw new Error('email已存在')
+        }
+    }    
 }
 ~~~
 
@@ -1156,7 +1159,7 @@ const router = new Router({
 })
 
 router.post('/register', async (ctx, next) => {
-    var valiData = new  RegisterValidator().validate(ctx)
+    var valiData = await new RegisterValidator().validate(ctx)
     ctx.body = '注册成功！！'
 })
 
@@ -1198,8 +1201,7 @@ const {Sequelize} = require('sequelize')
         username: valiData.get('body.username'),
         nickname: valiData.get('body.nickname'),
         email: valiData.get('body.email'),
-        password: valiData.
-        get('body.password'),
+        password: valiData.get('body.password'),
     }
     var dbReturn =  await Models.User.create(user)
     ctx.body = dbReturn    
@@ -1219,4 +1221,281 @@ password: {
 ~~~
 
 使用 postman 提交数据即可完成注册。
+
+## 用户登录与令牌分发
+
+在如今的应用中，用户登录方式多样，我们需要根据用户不同的登录方式来判断，因此我们先在 **core** 文件夹中创建一个 **userType**文件，用来做用户登录方式的枚举。里面有一个 **LoginType** 对象，这个对象包含四种不同的用户登录方式，以及一个根据值判断 LoginType 对象是否包含某种登录方式的函数：
+
+~~~javascript
+const LoginType = {
+    USER_MINI_PROGRAM:100,
+    USER_EMAIL:101,
+    USER_MOBILE:102,
+    ADMIN_EMAIL:200,
+    isConcludeType
+}
+function isConcludeType(val){
+    for (let key in this){
+        if (this[key] == val){
+            return true
+        }
+    }
+    return false
+}
+module.exports = LoginType
+~~~
+
+用户登录时提交的数据需要验证，所以我们需要编写一个 **validator **，在这个 **TokenValidator** 类中，对 
+
+account、secret 和 type 进行验证，其中 type 使用验证函数进行验证，写完之后记得导出：
+
+~~~JavaScript
+class TokenValidator extends LinValidator {
+    constructor() {
+        super()
+        this.account = [
+            new Rule('isLength', '账号不符合长度规范', {
+                min: 4,
+                max: 32
+            })
+        ]
+        this.secret = [
+            new Rule('isOptional'),
+            new Rule('isLength', '至少6个字符', {
+                min: 6,
+                max: 32
+            })
+        ]
+    }
+    validateLoginType(data) {
+        if (!data.body.type){
+            throw new Error('type是必须参数')
+        }
+        if (!LoginType.isConcludeType(data.body.type)){
+            throw new Error('type参数不合法')
+        }
+    }
+}
+~~~
+
+参数校验类写好之后，再来写 api 里的请求处理：
+
+~~~JavaScript
+const Router = require('koa-router')
+const { TokenValidator } = require('../../validators/validator')
+const router = new Router({
+    prefix: '/v1/token'
+})
+
+router.post('/', async (ctx) => {
+    var val = await new TokenValidator().validate(ctx)
+    throw new global.errs.Success()
+})
+module.exports = router
+~~~
+
+根据不同登录方式书写具体处理逻辑，当登录方式为用户邮箱登录时，调用emailLogin函数来处理，用户使用 USER_MINI_PROGRAM方式登录的处理逻辑，后面会有详细讲解：
+
+~~~JavaScript
+router.post('/', async (ctx) => {
+    var val = await new TokenValidator().validate(ctx)
+    switch (val.get('body.type')) {
+        case LoginType.USER_EMAIL:
+            await emailLogin(val.get('body.account'),val.get('body.secret'))
+            break;
+        case LoginType.USER_MINI_PROGRAM:
+
+            break;
+        default:
+            throw new global.errs.ParameterException('没有相应的处理函数!')
+            break;
+    }
+    // throw new global.errs.Success()
+})
+~~~
+
+在上面那段代码中，用户使用邮箱方式登录时，会调用 **emailLogin** 函数来进行用户账号和密码的验证，具体验证过程是，根据用户提交的邮箱查找数据库，当没有对应账号的用户时，抛出异常提示“用户不存在”。如果存在相应用户，再来判断密码是否匹配，如果密码不匹配，抛出异常提示“密码不正确”：
+
+~~~javascript
+async function emailLogin(account, secret) {
+    var user = await Model.User.findOne({
+        where: {
+            email: account
+        }
+    })
+    if (!user) {
+        throw new global.errs.AuthFailed('用户不存在！')
+    }
+    var corrent = bcrypt.compareSync(secret, user.password)
+    if (!corrent) {
+        throw new global.errs.AuthFailed('密码不正确！')
+    }
+}
+~~~
+
+当然，以上的异常类 **AuthFailed** 需要自己定义，顺便定义了一个资源未找到异常类：
+
+~~~javascript
+class AuthFailed extends HttpException {
+    constructor(msg, errorCode) {
+        super()
+        this.status = 401
+        this.msg = msg || '授权失败'
+        this.errorCode = errorCode || 10004
+    }
+}
+class NotFound extends HttpException {
+    constructor(msg, errorCode) {
+        super()
+        this.status = 404
+        this.msg = msg || '资源未找到'
+        this.errorCode = errorCode || 10000
+    }
+}
+~~~
+
+接下来需要书写令牌颁发相关代码，首先安装 jsonwebtoken：**npm install jsonwebtoken**。
+
+然后，在 **util.js** 中编写令牌生成函数，jwt 的 sign 函数有三个参数，第一个参数是用来签名的对象，第二个参数是密钥，第三个参数是可配置参数，我将令牌的有效时间设置于此：
+
+~~~javascript
+//生成令牌
+const generateToken = function (uid, scope) {
+    const securityKey = global.config.security.securityKey
+    const expiresIn = global.config.security.expiresIn
+    const token = jwt.sign({
+        uid,//用户id
+        scope  //用户权限
+    }, securityKey, {
+        expiresIn: expiresIn
+    })
+    return token
+}
+~~~
+
+其中的 secretKey 和 expiresIn 写在配置文件 config.js 中：
+
+~~~javascript
+    security:{
+        securityKey:"0011aabbc",
+        expiresIn:60*60
+    },
+~~~
+
+## JWT令牌实现API访问控制
+
+ 在实际项目中，绝大多数的 API 都是非公开的，也就是需要授权才能获取，而且需要实现一次授权，多次获取。也就是说授予的权利有一定时效性。我们在这里使用  jsonwebtoken 包来实现 token 的分发与验证，从而实现服务端对客户端的访问控制。jsonwebtoken 包的安装与令牌的生成在上面已经做了详细的讲解，下面主要讲解令牌的验证以及对 api 的访问控制：
+
+首先，需要写一个中间件来获取以及验证token，在书写这个中间件时需要做到三步：
+
+- 获取token需要使用 basic-auth 包
+- token无效的情况分为token不合法和token过期，需要分别抛出异常
+- 通过验证之后，将uid和scope保存到ctx.auth中
+
+~~~javascript
+const basicAuth = require('basic-auth')
+const jwt = require('jsonwebtoken')
+
+class Auth {
+    constructor() {
+
+    }
+    get m() {
+        return async (ctx, next) => {
+            const userToken = basicAuth(ctx.req)
+            try {
+                var decode = jwt.verify(userToken.name, 	                               global.config.security.securityKey)
+            } catch (error) {
+                if (error.name == 'TokenExpiredError') {
+                    throw new global.errs.Forbbiden('token已过期')
+                }
+                throw new global.errs.Forbbiden('token不合法')
+            }
+            ctx.auth = {
+                uid: decode.uid,
+                scope: decode.scope
+            }
+            await next()
+        }
+    }
+}
+module.exports = {
+    Auth
+}
+~~~
+
+然后，我们在 Auth 中间件中使用到的 Forbbiden 异常类定义如下：
+
+~~~JavaScript
+class Forbbiden extends HttpException {
+    constructor(msg, errorCode) {
+        super()
+        this.status = 403
+        this.msg = msg || '禁止访问'
+        this.errorCode = errorCode || 10006
+    }
+}
+~~~
+
+再者，在router中，一个请求路径可以对应多个中间件，把编写的auth中间件放在业务逻辑中间件前面。
+
+~~~javascript
+const Router = require('koa-router')
+const router = new Router({
+    prefix:'/v1/classic'
+})
+
+const {
+    Auth
+} = require('../../../middlewares/auth')
+
+router.get('/test', new Auth().m, async (ctx, next) => {
+    ctx.body = ctx.auth.uid
+})
+
+module.exports = router
+~~~
+
+最后，在postman中发起请求时，选择 Basic Auth，填写 Token：
+
+![1581425838239](C:\Users\Wan\AppData\Roaming\Typora\typora-user-images\1581425838239.png)
+
+## API权限分级控制
+
+API权限分级控制大致的设计思路如下：
+
+- 用户登录，系统生成令牌时，会根据不同用户设置不同的等级 scope
+- 每一个 api 在使用 Auth 中间件时，会传入自身的级别
+- 在 Auth 中间件中进行 token 检测时，会对 用户级别 和 api 级别进行比较，当用户级别大于 api 级别时，方可访问。
+
+首先，在 Auth 类的构造函数中，定义几种用户级别，以及 api 级别：
+
+~~~javascript
+constructor(level) {
+    this.level = level || 1
+    Auth.USER = 8
+    Auth.ADMIN = 16
+    Auth.SUPER_ADMIN = 32
+}
+~~~
+
+然后，在 Auth 类的 m函数中进行 api 级别和 用户级别比较：
+
+~~~javascript
+if (decode.scope < this.level) {
+    throw new global.errs.Forbbiden('用户权限不够')
+}
+~~~
+
+最后，当 api  使用 Auth中间件时，传入 api 等级：
+
+~~~JavaScript
+router.get('/test', new Auth(6).m, async (ctx, next) => {
+    ctx.body = ctx.auth.uid
+})
+~~~
+
+
+
+
 
