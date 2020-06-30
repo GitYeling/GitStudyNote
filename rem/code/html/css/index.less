@@ -1,0 +1,121 @@
+@import "common.less";
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+a{
+    text-decoration: none;
+}
+/*
+*  顶部分类、用户登录以及搜索框
+* 
+*/
+.top-content{
+    width: 100%;
+    height: 3.6rem;
+    background-color: rgb(255,219,71);
+    .category-login-content{
+        height: 50%;
+        width: 100%;
+        display: flex;
+        .category-image{
+            flex:2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img{
+                width: 40%;
+                height: 70%;
+            }
+        }
+        .ad-image{
+            flex:11;
+            display: flex;
+            justify-content: center;
+            align-items: center;            
+            img{
+                width: 100%;
+                height: 70%;
+            }            
+        }
+        .user-image{
+            flex:2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img{
+                width: 40%;
+                height: 70%;
+            }
+        }
+    }
+    .search-content{
+        height: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        input{
+            padding-left: 30rem / 25;
+            width: 93%;
+            height: 75%;
+            outline: none;
+            border: 0;
+            border-radius: 0.8rem;
+        }
+    }
+}
+
+/*轮播图部分  */
+.bannar-content{
+    position: relative;
+    width: 100%;
+    height: 5.2rem;
+    img{
+        width: 100%;
+    }
+    .bannar{
+        position: absolute;
+        top:0;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 0.4rem;
+        width: 90%;
+        height: 5.2rem;
+        background-color: chartreuse;
+        overflow: hidden;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+.three-add-content{
+    display: flex;
+    a{
+        flex: 1;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+.goods-menu{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    .item{
+        width: 20%;
+        height: 2.84rem;
+        font-size: 0.44rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        img{
+            width: 55%;
+            height: 60%;
+        }
+    }
+}

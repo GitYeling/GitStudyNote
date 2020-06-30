@@ -24,6 +24,8 @@ npm install koa --save
 
 ## 利用Koa创建一个服务器
 
+在项目根目录下，新建一个 `app.js` 文件
+
 ~~~shell
 const Koa = require('koa')
 const app = new Koa()
