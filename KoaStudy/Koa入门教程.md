@@ -2096,7 +2096,40 @@ module.exports = router
 
 ## 点赞业务
 
+**异常类**
+
+点赞业务需要用到的两个异常类，我们先准备好。当客户端对已经点过赞的内容进行点赞时，服务器需要响应用户已经点过赞了，相应的，代码中需要将重复点赞的异常抛出。同理，已经取消过点赞也需要对应的代码。
+
+~~~javascript
+class LikeError extends HttpException {
+    constructor(msg, errorCode) {
+        super();
+        this, this.status = 400;
+        this.msg = msg || '你已点过赞了';
+        this.errorCode = errorCode || 60001;
+    }
+}
+class DisLikeError extends HttpException {
+    constructor(msg, errorCode) {
+        super();
+        this, this.status = 400;
+        this.msg = msg || '您已取消点赞了';
+        this.errorCode = errorCode || 60001;
+    }
+}
+~~~
+
 **定义模型**
+
+点赞和喜欢其实是不同的两个概念，但是在本系统中不对其做区分。
+
+我们知道点赞或者喜欢是一种行为。在本系统中，主体是用户，客体是期刊，或者book。因在favor表中，需要有指定某位用户的用户编号 uid 、指定某条艺术实体类记录的 art_id 和 type。
+
+在 Favor 模型类中，我们定义了两个方法：like 和 dislike ，分别用来处理点赞和取消点赞的数据库操作。
+
+在 like函数中，我们首先需要根据请求数据 uid、art_id、type 查询数据库，如果存在此记录，这需要抛出异常，否则需要在 favor 表中新建一条记录， 并且需要将对应 Art 类型实体类的 fav_nums 数量加1。
+
+在 dislike 函数中，也需要对 favor 表做有无相应记录的判断，不同的是当不存在记录时才抛出异常，存在记录时，需要清除该条记录，并对对应表中的fav_nums字段做 decrement 操作。
 
 ~~~javascript
 const {Model,Sequelize} = require('sequelize')
@@ -2170,26 +2203,74 @@ module.exports = {
 }
 ~~~
 
-**异常类**
+**参数校验类**
+
+在点赞业务接口中，我们需要对 art_id 和 type 两个参数进行校验。由于 校验类 `PositiveIntegerValidator` 类中，已经对 `id` 做过了校验，因此 `LikeValidator` 类直接继承 `PositiveIntegerValidator` 类，然后在后面使用的时候，validate 校验函数对 id 加上别名 art_id 即可。
 
 ~~~javascript
-class LikeError extends HttpException {
-    constructor(msg, errorCode) {
+class LikeValidator extends PositiveIntegerValidator {
+    constructor(){
         super();
-        this, this.status = 400;
-        this.msg = msg || '你已点过赞了';
-        this.errorCode = errorCode || 60001;
+        this.validateType = checkType
+    } 
+}
+
+function checkType(vals){
+    if (!vals.body.type) {
+        throw new Error('type是必需参数')
+    }
+    if (!LoginType.isThisType(vals.body.type)) {
+        throw new Error('type参数不合法')
     }
 }
-class DisLikeError extends HttpException {
-    constructor(msg, errorCode) {
-        super();
-        this, this.status = 400;
-        this.msg = msg || '您已取消点赞了';
-        this.errorCode = errorCode || 60001;
-    }
+~~~
+
+**辅助函数 success**
+
+在 lib 文件夹中创建一个 helper.js 文件，在该文件中编写一个函数用就一个用途，封装抛出 Success 异常的语句。这样做是因为如果请求处理完成后，我们以抛出异常的形式给出成功类型的响应，难免有些奇怪，因此我们将这条语句封装起来并导出，在需要调用的文件中导入，直接使用 success 函数即可给出请求成功的响应。
+
+~~~javascript
+
+success = (msg,errorCode) => {
+    throw new global.errs.Success(msg,errorCode)
+}
+
+module.exports = {
+    success
 }
 ~~~
 
 **API编写**
 
+路由处理函数到的编写就比较清晰了，首先校验参数，然后进行数据库操作，最后调用 success 函数给出响应，过程中，任何环节出现问题，均抛出异常。需要注意的是在校验函数 validate 中校验字段别名如何编写。
+
+~~~javascript
+const Router = require('koa-router')
+const router = new Router({
+    prefix: '/v1/favor'
+})
+const {
+    Auth
+} = require('../../../middlewares/auth')
+const {LikeValidator} = require('../../validator/validator')
+const {Favor} = require('../../models/favor')
+const {success} = require('../../lib/helper')
+
+
+router.post('/like', new Auth().m, async (ctx, next) => {
+    const v = await new LikeValidator().validate(ctx,{
+        id:'art_id'
+    }) 
+    await Favor.like(v.get('body.art_id'),v.get('body.type'),ctx.auth.uid);
+    success()
+})
+router.post('/dislike', new Auth().m, async (ctx, next) => {
+    const v = await new LikeValidator().validate(ctx,{
+        id:'art_id'
+    }) 
+    await Favor.disLike(v.get('body.art_id'),v.get('body.type'),ctx.auth.uid);
+    success()
+})
+
+module.exports = router
+~~~
