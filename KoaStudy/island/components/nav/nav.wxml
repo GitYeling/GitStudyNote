@@ -1,0 +1,7 @@
+<view class="container">
+    <image class="icon" src="{{fisrt?imgList[1]:imgList[2]}}"/>
+    <view class="title">
+        {{title}}
+    </view>
+    <image class="icon" src="{{last?imgList[3]:imgList[4]}}"/>
+</view>

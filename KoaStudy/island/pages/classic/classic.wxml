@@ -1,0 +1,8 @@
+<view class="container">
+    <my-date index="{{8}}"></my-date>
+    <my-like favNums="{{favNums}}" likeStatus="{{likeStatus}}" readOnly="{{readOnly}}" bindMyLikeTap="likeTap"></my-like>
+</view>
+<my-movie wx:if="{{type===100}}" class="my-movie" image='{{image}}' content="{{content}}"></my-movie>
+<my-music wx:if="{{type===200}}" class="my-movie" image='{{image}}' content="{{content}}"></my-music>
+<my-sentence wx:if="{{type===300}}" class="my-movie" image='{{image}}' content="{{content}}"></my-sentence>
+<my-nav class="my-nav" title="{{title}}" first="false" last="true"></my-nav>

@@ -1,0 +1,5 @@
+<!--components/like/like.wxml-->
+<view class="container">
+    <image class="img" src="{{like_status?img_dis:img_hid}}" bindtap="LikeAction"/>
+    <text class="fav_nums">{{fav_nums}}</text>
+</view>

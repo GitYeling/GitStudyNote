@@ -1,0 +1,7 @@
+<!--pages/classic/classic.wxml-->
+<my-episode pubdate="{{Classic.pubdate}}" index="{{Classic.index}}"></my-episode>
+<my-like fav_nums="{{Classic.fav_nums}}" like_status="{{Classic.like_status}}" bindLikeAction="LikeAction"></my-like>
+<my-movie wx:if="{{Classic.type == 100}}" imageUrl="{{Classic.image}}" content="{{Classic.content}}"></my-movie>
+<my-sentence wx:if="{{Classic.type == 300}}" imageUrl="{{Classic.image}}" content="{{Classic.content}}"></my-sentence>
+<my-music wx:if="{{Classic.type == 200}}" imageUrl="{{Classic.image}}" content="{{Classic.content}}"></my-music>
+<my-navi bindonPrevious="onPrevious" bindonNext="onNext" title="{{Classic.title}}" next="{{lastestIndex==Classic.index?false:true}}" previous="{{Classic.index===1?false:true}}"></my-navi>

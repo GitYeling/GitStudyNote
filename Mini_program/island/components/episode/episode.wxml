@@ -1,0 +1,12 @@
+<!--components/episode/episode.wxml-->
+<view class="container">
+    <view class="index_container">
+        <text class="lable">No.</text>
+        <text class="index">{{index<10?'0'+index:index}}</text>
+        <text class="plain"></text>
+    </view>
+    <view class="date_container">
+        <text class="mouth">{{mouthList[mouth]}}</text>
+        <text class="year">{{year}}</text>
+    </view>
+</view>

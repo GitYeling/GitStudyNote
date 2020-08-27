@@ -1,0 +1,8 @@
+<!--components/classic/sentence/sentence.wxml-->
+<!--components/classic/movie/movie.wxml-->
+<view class="container">
+    <image class="img" src="{{imageUrl}}"/>
+    <image class="tag" src="./images/essay@tag.png"/>
+    <view class="content">{{content}}</view>
+</view>
+

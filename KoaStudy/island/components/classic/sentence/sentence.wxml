@@ -1,0 +1,5 @@
+<view class="container">
+    <image class="background" src="{{image}}" mode="widthFix"/>
+    <image class="tag" src="./images/essay@tag.png"/>
+    <text class="content">{{content}}</text>
+</view>

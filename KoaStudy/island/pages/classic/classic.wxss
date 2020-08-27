@@ -1,0 +1,22 @@
+/* pages/classic/classic.wxss */
+page {
+  display: flex;
+  flex-direction: column;
+}
+page .container {
+  padding: 0 20rpx;
+  margin: 0;
+  margin-bottom: 20rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+page .container my-date {
+  margin-bottom: 20rpx;
+}
+page .my-nav {
+  position: fixed;
+  bottom: 40rpx;
+  left: 50%;
+  transform: translateX(-50%);
+}

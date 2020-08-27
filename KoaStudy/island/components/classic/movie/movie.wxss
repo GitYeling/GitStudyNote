@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+.container .background {
+  width: 100%;
+}
+.container .tag {
+  position: relative;
+  bottom: 60rpx;
+  left: 40rpx;
+  width: 46rpx;
+  height: 142rpx;
+}
+.container .content {
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 100rpx;
+  width: 600rpx;
+  word-break: break-all;
+}

@@ -1,0 +1,16 @@
+/* components/classic/sentence/sentence.wxss */
+.container .img {
+  width: 100%;
+}
+.container .tag {
+  position: relative;
+  left: 40rpx;
+  top: -70rpx;
+  width: 46rpx;
+  height: 142rpx;
+}
+.container .content {
+  margin: 0 auto;
+  width: 80%;
+  margin-top: 30rpx;
+}

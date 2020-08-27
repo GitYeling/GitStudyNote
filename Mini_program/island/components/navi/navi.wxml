@@ -1,0 +1,6 @@
+<!--components/navi/navi.wxml-->
+<view class="container">
+    <image class="left" src="{{previous?icons['left']:icons['leftHidden']}}" bindtap="PreviousTap"/>
+    <text class="title">{{title}}</text>
+    <image class="right" src="{{next?icons['right']:icons['rightHidden']}}" bindtap="NextTap"/>
+</view>

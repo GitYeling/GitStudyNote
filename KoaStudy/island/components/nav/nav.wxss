@@ -1,0 +1,15 @@
+.container {
+  margin: 10rpx auto;
+  width: 660rpx;
+  display: flex;
+  justify-content: space-between;
+  background-color: #eee;
+  border-radius: 5rpx;
+}
+.container .icon {
+  width: 80rpx;
+  height: 80rpx;
+}
+.container .title {
+  line-height: 80rpx;
+}

@@ -1,0 +1,4 @@
+<container class="like-container">
+    <image mode="" src="{{likeStatus?imgDis:imgHid}}" class="img"  bindtap="handleTap"/>
+    <text class="fav-nums">{{favNums}}</text>
+</container>

@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "my-like":"../../components/like/like",
+    "my-date":"../../components/date/date",
+    "my-nav":"../../components/nav/nav",
+    "my-movie":"../../components/classic/movie/movie",
+    "my-music":"../../components/classic/music/music",
+    "my-sentence":"../../components/classic/sentence/sentence"
+  }
+}

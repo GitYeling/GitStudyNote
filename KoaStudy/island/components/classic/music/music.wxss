@@ -1,0 +1,39 @@
+/* components/classic/music/music.wxss */
+.container {
+  display: flex;
+  flex-direction: column;
+}
+.container .player {
+  display: flex;
+  position: relative;
+}
+.container .player .background {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 100%;
+  width: 50%;
+}
+.container .player .play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 999;
+  width: 120rpx;
+  height: 120rpx;
+}
+.container .tag {
+  position: relative;
+  bottom: 70rpx;
+  left: 40rpx;
+  width: 46rpx;
+  height: 142rpx;
+}
+.container .content {
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 100rpx;
+  width: 600rpx;
+  word-break: break-all;
+}
