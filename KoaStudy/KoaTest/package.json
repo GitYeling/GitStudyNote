@@ -22,6 +22,6 @@
     "require-directory": "^2.1.1",
     "sequelize": "^5.21.4",
     "sequelize-cli": "^5.5.1",
-    "validator": "^12.2.0"
+    "validator": "^13.7.0"
   }
 }
